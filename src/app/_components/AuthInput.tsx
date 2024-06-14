@@ -9,9 +9,10 @@ type Props = {
 
 function AuthInput({ label, type, value, setValue }: Props) {
   return (
-    <div className="w-full">
-      <div>{label}</div>
+    <div className="flex flex-col gap-1">
+      <div className="text-black font-semibold pl-1">{label}</div>
       <input
+        className="rounded-md border border-black"
         type={type}
         value={value}
         onChange={(e) => {

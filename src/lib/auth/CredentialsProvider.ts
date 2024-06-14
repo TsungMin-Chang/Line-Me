@@ -31,7 +31,7 @@ export default CredentialsProvider({
 
     const [existedUser] = await db
       .select({
-        id: usersTable.displayId,
+        id: usersTable.id,
         username: usersTable.username,
         email: usersTable.email,
         provider: usersTable.provider,
@@ -59,7 +59,7 @@ export default CredentialsProvider({
       return {
         email: createdUser.email,
         name: createdUser.username,
-        id: createdUser.displayId,
+        id: createdUser.id,
       };
     }
 

@@ -19,7 +19,7 @@ export const {
       if (!email) return session;
       const [user] = await db
         .select({
-          id: usersTable.displayId,
+          id: usersTable.id,
           username: usersTable.username,
           provider: usersTable.provider,
           email: usersTable.email,
@@ -48,7 +48,7 @@ export const {
       // Check if the email has been registered
       const [existedUser] = await db
         .select({
-          id: usersTable.displayId,
+          id: usersTable.id,
         })
         .from(usersTable)
         .where(eq(usersTable.email, email.toLowerCase()))

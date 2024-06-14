@@ -14,10 +14,10 @@ export default function ButtonNav() {
   const router = useRouter();
   useEffect(() => {
     if (value === 0) {
-      router.push("/tabs/chats");
+      router.push("/navs/chats");
     }
     if (value === 1) {
-      router.push("/tabs/stories");
+      router.push("/navs/stories");
     }
   }, [value]);
   return (

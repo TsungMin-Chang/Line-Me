@@ -4,7 +4,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-function TabsLayout({ children }: Props) {
+function NavsLayout({ children }: Props) {
   return (
     <>
       <div className="bg-white text-black h-screen w-screen overflow-y-scroll">{children}</div>
@@ -13,4 +13,4 @@ function TabsLayout({ children }: Props) {
   );
 }
 
-export default TabsLayout;
+export default NavsLayout;
