@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 2998",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 2998",
     "lint": "next lint",
     "format": "prettier --write .",
-    "migrate": "drizzle-kit push:pg",
-    "exec:db": "podman exec -it chendlar psql -Upostgres chendlar"
+    "migrate": "drizzle-kit push",
+    "exec:db": "podman exec -it lineme psql -Upostgres lineme"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
