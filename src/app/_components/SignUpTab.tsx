@@ -23,8 +23,7 @@ function SignInTab() {
   };
 
   return (
-    <div className="min-w-[300px]">
-      <div className=" flex flex-col gap-2">
+    <div className="border-2 border-slate-400 rounded p-4">
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
 
           <AuthInput
@@ -55,12 +54,14 @@ function SignInTab() {
             setValue={setConfirmPassword}
           />
 
-          <button type="submit" className="w-full">
+          <button
+            type="submit"
+            className="my-2 rounded-full bg-brand px-4 py-2 text-white transition-colors hover:bg-brand/70"
+          >
             Sign Up
           </button>
+
         </form>
-        
-      </div>
     </div>
   );
 }
