@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
+import Google from 'next-auth/providers/google'
 
 import { eq } from "drizzle-orm";
 
@@ -12,7 +13,7 @@ export const {
   handlers: { GET, POST },
   auth,
 } = NextAuth({
-  providers: [GitHub, CredentialsProvider],
+  providers: [GitHub, Google, CredentialsProvider],
   callbacks: {
     async session({ session, token }) {
       const email = token.email || session?.user?.email;
@@ -39,24 +40,29 @@ export const {
       };
     },
     async jwt({ token, account }) {
-      // Sign in with social account, e.g. GitHub, Google, etc.
+      // sign in with social account
       if (!account) return token;
-      const { name, email } = token;
+      const { name, email, picture } = token;
       const provider = account.provider;
       if (!name || !email || !provider) return token;
-
-      // Check if the email has been registered
+      
+      // check if email + provider combination exists
       const [existedUser] = await db
         .select({
           id: usersTable.id,
+          provider: usersTable.provider,
         })
         .from(usersTable)
         .where(eq(usersTable.email, email.toLowerCase()))
         .execute();
-      if (existedUser) return token;
-      if (provider !== "github") return token;
 
-      // Sign up
+      // Yes: return
+      if (existedUser && existedUser.provider === provider) return token;
+
+      if ((provider !== "github") && (provider !== "google")) {
+        return token;
+      }
+      // No: insert db and sign up
       await db.insert(usersTable).values({
         username: name,
         email: email.toLowerCase(),

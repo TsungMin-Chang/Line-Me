@@ -9,6 +9,8 @@ import SignpostIcon from "@mui/icons-material/Signpost";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 
+import AddButton from "./AddButton";
+
 export default function ButtonNav() {
   const [value, setValue] = useState(0);
   const router = useRouter();
@@ -21,18 +23,21 @@ export default function ButtonNav() {
     }
   }, [value]);
   return (
-    <div className="fixed bottom-0 w-screen">
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-        className="w-full"
-      >
-        <BottomNavigationAction label="Chats" icon={<PeopleAltIcon />} />
-        <BottomNavigationAction label="Stories" icon={<SignpostIcon />} />
-      </BottomNavigation>
-    </div>
+    <>
+      <div className="sticky bottom-0 w-screen">
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+          className="w-full"
+        >
+          <BottomNavigationAction label="Chats" icon={<PeopleAltIcon />} />
+          <BottomNavigationAction label="Stories" icon={<SignpostIcon />} />
+        </BottomNavigation>
+      </div>
+      <AddButton nav={value}/>
+    </>
   );
 }

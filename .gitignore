@@ -38,6 +38,7 @@ log.log
 next-env.d.ts
 
 /pg-data
+/static
 
 # public
 /public/sw.js

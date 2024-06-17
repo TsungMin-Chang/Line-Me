@@ -1,4 +1,15 @@
+"use client";
+
+import StoryBolck from "./_components/StoryBlock";
+
 function StoriesPage() {
-  return <div>stories</div>;
+  return (
+    <>
+      {Array(20).fill(0).map((_, i) => (
+        <StoryBolck key={i} />
+      ))}
+
+    </>
+  );
 }
 export default StoriesPage;

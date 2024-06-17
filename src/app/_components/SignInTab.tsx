@@ -25,7 +25,7 @@ function SignInTab() {
   };
 
   return (
-    <div className="border-2 border-slate-400 rounded p-4">
+    <div className="bg-zinc-100 rounded px-8 py-6">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
         <AuthInput
@@ -49,7 +49,6 @@ function SignInTab() {
           Sign In
         </button>
 
-
       </form>
 
       <div className="flex w-full items-center gap-1 py-2">
@@ -60,19 +59,25 @@ function SignInTab() {
 
       <div className="flex flex-col items-center gap-y-3">
         <button
-          className="w-full max-w-xs font-bold shadow-sm rounded-lg py-2 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all focus:outline-none hover:bg-indigo-200 hover:shadow focus:shadow-sm focus:shadow-outline">
+          className="w-full max-w-xs font-bold shadow-sm rounded-lg py-2 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all focus:outline-none hover:bg-indigo-200 hover:shadow focus:shadow-sm focus:shadow-outline"
+          onClick={async () => {
+            await signIn("google", {
+              callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/navs/chats`,
+            });
+          }}
+        >
           <div className="bg-white p-1 rounded-full">
             <FcGoogle size={20}/>
           </div>
           <span className="ml-4">
-            Sign In with Google
+            Google Sign In
           </span>
         </button>
 
         <button
           className="w-full max-w-xs font-bold shadow-sm rounded-lg py-2 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all focus:outline-none hover:bg-indigo-200 hover:shadow focus:shadow-sm focus:shadow-outline"
           onClick={async () => {
-            signIn("github", {
+            await signIn("github", {
               callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/navs/chats`,
             });
           }}
@@ -81,7 +86,7 @@ function SignInTab() {
             <BsGithub size={20} color={"black"}/>
           </div>
           <span className="ml-4">
-            Sign In with Github
+            Github Sign In
           </span>
         </button>
       </div>

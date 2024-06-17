@@ -1,4 +1,15 @@
+"use client";
+
+import ChatBlock from "./_components/ChatBlock";
+
 function ChatsPage() {
-  return <div>chats</div>;
+  return (
+    <>
+      {Array(20).fill(0).map((_, i) => (
+        <ChatBlock index={i + 1} key={i} />
+      ))}
+
+    </>
+  );
 }
 export default ChatsPage;

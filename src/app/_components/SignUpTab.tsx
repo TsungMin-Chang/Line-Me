@@ -12,6 +12,18 @@ function SignInTab() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
+  const [file, setFile] = useState<File | null>(null);
+  const [status, setStatus] = useState<
+    "initial" | "uploading" | "success" | "fail"
+  >("initial");
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setStatus("initial");
+      setFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signIn("credentials", {
@@ -23,7 +35,7 @@ function SignInTab() {
   };
 
   return (
-    <div className="border-2 border-slate-400 rounded p-4">
+    <div className="bg-zinc-100 rounded px-8 py-6">
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
 
           <AuthInput
@@ -53,6 +65,21 @@ function SignInTab() {
             value={confirmPassword}
             setValue={setConfirmPassword}
           />
+
+          <div className="flex flex-col my-2 gap-1">
+            <div className="text-black font-semibold pl-1">Profile Photo</div>
+            <div className="input-group">
+              <label htmlFor="file" className="sr-only">
+                Choose File
+              </label>
+              <input 
+                id="file" 
+                type="file" 
+                onChange={handleFileChange}
+                className="text-black truncate"
+              />
+            </div>
+          </div>
 
           <button
             type="submit"
