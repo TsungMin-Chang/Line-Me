@@ -25,7 +25,7 @@ function SignInTab() {
   };
 
   return (
-    <div className="bg-zinc-100 rounded px-8 py-6">
+    <div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
         <AuthInput
