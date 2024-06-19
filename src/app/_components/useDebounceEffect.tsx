@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { PixelCrop } from 'react-image-crop'
+import { useEffect } from "react";
+import { PixelCrop } from "react-image-crop";
 
 export function useDebounceEffect(
   fn: () => void,
@@ -8,11 +8,11 @@ export function useDebounceEffect(
 ) {
   useEffect(() => {
     const t = setTimeout(() => {
-      fn.apply(undefined, [])
-    }, waitTime)
+      fn.apply(undefined, []);
+    }, waitTime);
 
     return () => {
-      clearTimeout(t)
-    }
-  }, [completedCrop])
+      clearTimeout(t);
+    };
+  }, [completedCrop]);
 }

@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
-import Google from 'next-auth/providers/google'
+import Google from "next-auth/providers/google";
 
 import { eq, and } from "drizzle-orm";
 
@@ -24,7 +24,7 @@ export const {
           username: usersTable.username,
           provider: usersTable.provider,
           email: usersTable.email,
-          picture: usersTable.picture
+          picture: usersTable.picture,
         })
         .from(usersTable)
         .where(eq(usersTable.email, email.toLowerCase()))
@@ -47,7 +47,7 @@ export const {
       const { name, email, picture } = token;
       const provider = account.provider;
       if (!name || !email || !picture || !provider) return token;
-      if ((provider !== "github") && (provider !== "google")) {
+      if (provider !== "github" && provider !== "google") {
         return token;
       }
 

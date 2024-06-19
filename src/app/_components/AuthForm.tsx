@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 
 import SignInPage from "./SignInPage";
 import SignUpPage from "./SignUpPage";
@@ -15,8 +15,8 @@ function AuthForm() {
   };
 
   return (
-    <div className="w-full h-full">
-      <div className="flex-1 bg-zinc-100 rounded-lg">
+    <div className="h-full w-full">
+      <div className="flex-1 rounded-lg bg-zinc-100">
         <div className="flex justify-center">
           <Tabs value={value} onChange={handleChange}>
             <Tab label="Sign In" />
@@ -24,8 +24,8 @@ function AuthForm() {
           </Tabs>
         </div>
         <div className="px-9 py-6">
-          {value === 0 && <SignInPage/>}
-          {value === 1 && <SignUpPage/>}
+          {value === 0 && <SignInPage />}
+          {value === 1 && <SignUpPage />}
         </div>
       </div>
     </div>

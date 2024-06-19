@@ -286,9 +286,7 @@ export default function StoryAddDialog({ open, onClose }: AddDialogProps) {
           <Button onClick={handleNext}>Next</Button>
         )}
         {activeStep === steps.length - 1 && (
-          <Button onClick={handleSubmit}>
-            Submit
-          </Button>
+          <Button onClick={handleSubmit}>Submit</Button>
         )}
       </DialogActions>
     </Dialog>

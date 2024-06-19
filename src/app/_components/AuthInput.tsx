@@ -10,7 +10,7 @@ type Props = {
 function AuthInput({ label, type, value, setValue }: Props) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-black font-semibold pl-1">{label}</label>
+      <label className="pl-1 font-semibold text-black">{label}</label>
       <input
         className="rounded-md border border-black text-black"
         type={type}

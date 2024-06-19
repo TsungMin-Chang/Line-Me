@@ -1,21 +1,21 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef } from "react";
 import type { Dispatch, SetStateAction } from "react";
-
 import ReactCrop, {
   centerCrop,
   makeAspectCrop,
   Crop,
   PixelCrop,
-} from 'react-image-crop'
-import 'react-image-crop/dist/ReactCrop.css'
-import { useDebounceEffect } from './useDebounceEffect'
-import { canvasPreview } from './canvasPreview'
+} from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+
+import { canvasPreview } from "./canvasPreview";
+import { useDebounceEffect } from "./useDebounceEffect";
 
 function centerAspectCrop(
   mediaWidth: number,
@@ -25,7 +25,7 @@ function centerAspectCrop(
   return centerCrop(
     makeAspectCrop(
       {
-        unit: '%',
+        unit: "%",
         width: 90,
       },
       aspect,
@@ -34,7 +34,7 @@ function centerAspectCrop(
     ),
     mediaWidth,
     mediaHeight,
-  )
+  );
 }
 
 type ImgCropDialogProps = {
@@ -54,45 +54,44 @@ export default function ImgCropDialog({
   crop,
   setCrop,
   imgSrc,
-  setPicture
+  setPicture,
 }: ImgCropDialogProps) {
-
-  const previewCanvasRef = useRef<HTMLCanvasElement>(null)
-  const imgRef = useRef<HTMLImageElement>(null)
+  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   // const hiddenAnchorRef = useRef<HTMLAnchorElement>(null)
   // const blobUrlRef = useRef('')
-  const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
 
   // handle the initial load event
   function onImageLoad(e: React.SyntheticEvent<HTMLImageElement>) {
-    const { width, height } = e.currentTarget
+    const { width, height } = e.currentTarget;
     // Set the initial crop area to the centered square of the entire image
-    setCrop(centerAspectCrop(width, height, 1))
+    setCrop(centerAspectCrop(width, height, 1));
   }
 
   async function handleSave() {
-    const image = imgRef.current
-    const previewCanvas = previewCanvasRef.current
+    const image = imgRef.current;
+    const previewCanvas = previewCanvasRef.current;
     if (!image || !previewCanvas || !completedCrop) {
-      throw new Error('Crop canvas does not exist')
+      throw new Error("Crop canvas does not exist");
     }
 
     // This will size relative to the uploaded image
     // size. If you want to size according to what they
     // are looking at on screen, remove scaleX + scaleY
-    const scaleX = image.naturalWidth / image.width
-    const scaleY = image.naturalHeight / image.height
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
 
     // Create an offscreen canvas
     const offscreen = new OffscreenCanvas(
       completedCrop.width * scaleX,
       completedCrop.height * scaleY,
-    )
+    );
 
     // Get the offscreen canvas
-    const ctx = offscreen.getContext('2d')
+    const ctx = offscreen.getContext("2d");
     if (!ctx) {
-      throw new Error('No 2d context')
+      throw new Error("No 2d context");
     }
 
     // Draw the cropped area from the preview canvas onto the offscreen canvas
@@ -106,19 +105,19 @@ export default function ImgCropDialog({
       0,
       offscreen.width,
       offscreen.height,
-    )
+    );
 
     // Convert the offscreen canvas to a blob
     // You might want { type: "image/jpeg", quality: <0 to 1> } to reduce image size
     const blob = await offscreen.convertToBlob({
-      type: 'image/png',
-    })
+      type: "image/png",
+    });
 
     const formData = new FormData();
     const fileName = new Date().getTime().toString() + "png";
-    formData.append('picture', blob, fileName);
+    formData.append("picture", blob, fileName);
     setPicture(formData);
-  
+
     // Revoke the any previous blob URL
     // if (blobUrlRef.current) {
     //   URL.revokeObjectURL(blobUrlRef.current)
@@ -145,16 +144,12 @@ export default function ImgCropDialog({
         previewCanvasRef.current
       ) {
         // Update the preview canvas with the current crop
-        canvasPreview(
-          imgRef.current,
-          previewCanvasRef.current,
-          completedCrop,
-        )
+        canvasPreview(imgRef.current, previewCanvasRef.current, completedCrop);
       }
     },
     100, // Debounce delay
     completedCrop, // Dependencies to watch for changes
-  )
+  );
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -171,12 +166,7 @@ export default function ImgCropDialog({
           minHeight={100}
           circularCrop
         >
-          <img
-            ref={imgRef}
-            alt="Crop me"
-            src={imgSrc}
-            onLoad={onImageLoad}
-          />
+          <img ref={imgRef} alt="Crop me" src={imgSrc} onLoad={onImageLoad} />
         </ReactCrop>
       </DialogContent>
       <DialogActions>
@@ -185,13 +175,13 @@ export default function ImgCropDialog({
         <Button onClick={() => handleSave()}>Save</Button>
       </DialogActions>
       {!!completedCrop && (
-        <div className='hidden'>
+        <div className="hidden">
           <div>
             <canvas
               ref={previewCanvasRef}
               style={{
-                border: '1px solid black',
-                objectFit: 'contain',
+                border: "1px solid black",
+                objectFit: "contain",
                 width: completedCrop.width,
                 height: completedCrop.height,
               }}
@@ -212,5 +202,5 @@ export default function ImgCropDialog({
         </div>
       )}
     </Dialog>
-  )
+  );
 }

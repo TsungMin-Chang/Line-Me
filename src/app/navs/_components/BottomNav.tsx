@@ -37,7 +37,7 @@ export default function ButtonNav() {
           <BottomNavigationAction label="Stories" icon={<SignpostIcon />} />
         </BottomNavigation>
       </div>
-      <AddButton nav={value}/>
+      <AddButton nav={value} />
     </>
   );
 }

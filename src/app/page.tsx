@@ -2,7 +2,7 @@ import AuthForm from "./_components/AuthForm";
 
 export default function Home() {
   return (
-    <main className="w-screen h-screen py-28 px-10 bg-white">
+    <main className="h-screen w-screen bg-white px-10 py-28">
       <AuthForm />
     </main>
   );

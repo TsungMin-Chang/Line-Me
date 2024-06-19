@@ -1,10 +1,4 @@
-import {
-  index,
-  pgTable,
-  uuid,
-  varchar,
-  unique,
-} from "drizzle-orm/pg-core";
+import { index, pgTable, uuid, varchar, unique } from "drizzle-orm/pg-core";
 
 // Checkout the many-to-many relationship in the following tutorial:
 // https://orm.drizzle.team/docs/rqb#many-to-many

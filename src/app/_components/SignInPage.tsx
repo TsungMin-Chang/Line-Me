@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { signIn } from "next-auth/react";
-
-import { FcGoogle } from "react-icons/fc";
 import { BsGithub } from "react-icons/bs";
+import { FcGoogle } from "react-icons/fc";
+
+import { signIn } from "next-auth/react";
 
 import { publicEnv } from "@/lib/env/public";
 
 import AuthInput from "./AuthInput";
 
 function SignInPage() {
-
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -27,7 +26,6 @@ function SignInPage() {
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
         <AuthInput
           label="Email"
           type="email"
@@ -48,7 +46,6 @@ function SignInPage() {
         >
           Sign In
         </button>
-
       </form>
 
       <div className="flex w-full items-center gap-1 py-2">
@@ -59,38 +56,33 @@ function SignInPage() {
 
       <div className="flex flex-col items-center gap-y-3">
         <button
-          className="w-full max-w-xs font-bold shadow-sm rounded-lg py-2 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all focus:outline-none hover:bg-indigo-200 hover:shadow focus:shadow-sm focus:shadow-outline"
+          className="focus:shadow-outline flex w-full max-w-xs items-center justify-center rounded-lg bg-indigo-100 py-2 font-bold text-gray-800 shadow-sm transition-all hover:bg-indigo-200 hover:shadow focus:shadow-sm focus:outline-none"
           onClick={async () => {
             await signIn("google", {
               callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/navs/chats`,
             });
           }}
         >
-          <div className="bg-white p-1 rounded-full">
-            <FcGoogle size={20}/>
+          <div className="rounded-full bg-white p-1">
+            <FcGoogle size={20} />
           </div>
-          <span className="ml-4">
-            Google Sign In
-          </span>
+          <span className="ml-4">Google Sign In</span>
         </button>
 
         <button
-          className="w-full max-w-xs font-bold shadow-sm rounded-lg py-2 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all focus:outline-none hover:bg-indigo-200 hover:shadow focus:shadow-sm focus:shadow-outline"
+          className="focus:shadow-outline flex w-full max-w-xs items-center justify-center rounded-lg bg-indigo-100 py-2 font-bold text-gray-800 shadow-sm transition-all hover:bg-indigo-200 hover:shadow focus:shadow-sm focus:outline-none"
           onClick={async () => {
             await signIn("github", {
               callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/navs/chats`,
             });
           }}
         >
-          <div className="bg-white p-1 rounded-full">
-            <BsGithub size={20} color={"black"}/>
+          <div className="rounded-full bg-white p-1">
+            <BsGithub size={20} color={"black"} />
           </div>
-          <span className="ml-4">
-            Github Sign In
-          </span>
+          <span className="ml-4">Github Sign In</span>
         </button>
       </div>
-      
     </div>
   );
 }
