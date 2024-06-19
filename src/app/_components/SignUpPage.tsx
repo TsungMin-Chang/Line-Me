@@ -1,25 +1,22 @@
 import { useState } from "react";
+import { Crop } from 'react-image-crop';
 import { signIn } from "next-auth/react";
 
 import { publicEnv } from "@/lib/env/public";
-
 import AuthInput from "./AuthInput";
-
 import ImgCropDialog from "./ImgCropDialog";
 
-import { Crop } from 'react-image-crop';
-
-
-function SignInTab() {
+function SignUpPage() {
 
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [picture, setPicture] = useState<FormData | null>(null);
 
+  const [openImgCropDialog, setOpenImgCropDialog] = useState(false);
   const [crop, setCrop] = useState<Crop>();
   const [imgSrc, setImgSrc] = useState('');
-  const [openImgCropDialog, setOpenImgCropDialog] = useState(false);
 
   function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
@@ -35,17 +32,35 @@ function SignInTab() {
 
   const handleCancel = () => {
     (document.getElementById("fileinput") as HTMLInputElement).value= "";
-    setCrop(undefined); 
     setImgSrc('');
+    setPicture(null);
+    setCrop(undefined);
     setOpenImgCropDialog(false);
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if(!email) {
+      alert("What is your email?");
+      return;
+    };
+    if(!username) {
+      alert("What is your username?");
+      return;
+    }
+    if(!password || !confirmPassword || password !== confirmPassword || password.length < 8) {
+      alert("Please double check your password!\n(Note: has to be at least 8 characters long!)");
+      return;
+    }
+    // if(!picture) {
+    //   alert("Please (re)upload a profile picture!"); // TODO
+    //   return;
+    // }
     signIn("credentials", {
       email,
       username,
       password,
+      picture: "fake for now",
       callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/navs/chats`,
     });
   };
@@ -109,14 +124,15 @@ function SignInTab() {
       <ImgCropDialog
         open={openImgCropDialog}
         onClose={() => setOpenImgCropDialog(false)}
+        onCancel={handleCancel}
         imgSrc={imgSrc}
         crop={crop}
         setCrop={setCrop}
-        onCancel={handleCancel}
+        setPicture={setPicture}
       />
 
     </>
   );
 }
 
-export default SignInTab;
+export default SignUpPage;

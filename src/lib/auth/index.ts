@@ -24,6 +24,7 @@ export const {
           username: usersTable.username,
           provider: usersTable.provider,
           email: usersTable.email,
+          picture: usersTable.picture
         })
         .from(usersTable)
         .where(eq(usersTable.email, email.toLowerCase()))
@@ -35,6 +36,7 @@ export const {
           id: user.id,
           username: user.username,
           email: user.email,
+          picture: user.picture,
           provider: user.provider,
         },
       };
@@ -44,7 +46,7 @@ export const {
       if (!account) return token;
       const { name, email, picture } = token;
       const provider = account.provider;
-      if (!name || !email || !provider) return token;
+      if (!name || !email || !picture || !provider) return token;
       if ((provider !== "github") && (provider !== "google")) {
         return token;
       }
@@ -70,6 +72,7 @@ export const {
       await db.insert(usersTable).values({
         username: name,
         email: email.toLowerCase(),
+        picture,
         provider,
       });
       return token;

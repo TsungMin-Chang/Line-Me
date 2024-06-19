@@ -8,7 +8,7 @@ import { publicEnv } from "@/lib/env/public";
 
 import AuthInput from "./AuthInput";
 
-function SignInTab() {
+function SignInPage() {
 
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
@@ -95,4 +95,4 @@ function SignInTab() {
   );
 }
 
-export default SignInTab;
+export default SignInPage;

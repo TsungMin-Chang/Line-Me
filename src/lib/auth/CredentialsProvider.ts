@@ -11,14 +11,16 @@ export default CredentialsProvider({
   name: "credentials",
   credentials: {
     email: { label: "Email", type: "text" },
-    username: { label: "Userame", type: "text", optional: true },
+    username: { label: "Username", type: "text", optional: true },
     password: { label: "Password", type: "password" },
+    picture: { label: "Picture", type: "text" }, // TODO
   },
   async authorize(credentials) {
     let validatedCredentials: {
       email: string;
       username?: string;
       password: string;
+      picture: string; // TODO
     };
 
     try {
@@ -27,7 +29,7 @@ export default CredentialsProvider({
       console.log("Wrong credentials. Try again.");
       return null;
     }
-    const { email, username, password } = validatedCredentials;
+    const { email, username, password, picture } = validatedCredentials; // TODO
 
     const [existedUser] = await db
       .select({
@@ -52,6 +54,7 @@ export default CredentialsProvider({
         .values({
           username,
           email: email.toLowerCase(),
+          picture,
           hashedPassword,
           provider: "credentials",
         })

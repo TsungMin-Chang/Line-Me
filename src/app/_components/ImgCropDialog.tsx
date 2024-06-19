@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import type { Dispatch, SetStateAction } from "react";
 
 import ReactCrop, {
   centerCrop,
@@ -6,19 +7,15 @@ import ReactCrop, {
   Crop,
   PixelCrop,
 } from 'react-image-crop'
-
-import type { Dispatch, SetStateAction } from "react";
+import 'react-image-crop/dist/ReactCrop.css'
+import { useDebounceEffect } from './useDebounceEffect'
+import { canvasPreview } from './canvasPreview'
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-
-import { useDebounceEffect } from './useDebounceEffect'
-import { canvasPreview } from './canvasPreview'
-
-import 'react-image-crop/dist/ReactCrop.css'
 
 function centerAspectCrop(
   mediaWidth: number,
@@ -43,25 +40,27 @@ function centerAspectCrop(
 type ImgCropDialogProps = {
   open: boolean;
   onClose: () => void;
+  onCancel: () => void;
   imgSrc: string;
   crop?: Crop;
   setCrop: Dispatch<SetStateAction<Crop | undefined>>;
-  onCancel: () => void;
+  setPicture: Dispatch<SetStateAction<FormData | null>>;
 };
 
 export default function ImgCropDialog({
   open,
   onClose,
+  onCancel,
   crop,
   setCrop,
   imgSrc,
-  onCancel,
+  setPicture
 }: ImgCropDialogProps) {
 
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
-  const hiddenAnchorRef = useRef<HTMLAnchorElement>(null)
-  const blobUrlRef = useRef('')
+  // const hiddenAnchorRef = useRef<HTMLAnchorElement>(null)
+  // const blobUrlRef = useRef('')
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
 
   // handle the initial load event
@@ -71,7 +70,7 @@ export default function ImgCropDialog({
     setCrop(centerAspectCrop(width, height, 1))
   }
 
-  async function onCropClick() {
+  async function handleSave() {
     const image = imgRef.current
     const previewCanvas = previewCanvasRef.current
     if (!image || !previewCanvas || !completedCrop) {
@@ -110,20 +109,22 @@ export default function ImgCropDialog({
     )
 
     // Convert the offscreen canvas to a blob
-    // You might want { type: "image/jpeg", quality: <0 to 1> } to
-    // reduce image size
+    // You might want { type: "image/jpeg", quality: <0 to 1> } to reduce image size
     const blob = await offscreen.convertToBlob({
       type: 'image/png',
     })
-    console.log(blob);
 
+    const formData = new FormData();
+    const fileName = new Date().getTime().toString() + "png";
+    formData.append('picture', blob, fileName);
+    setPicture(formData);
+  
     // Revoke the any previous blob URL
-    if (blobUrlRef.current) {
-      URL.revokeObjectURL(blobUrlRef.current)
-    }
+    // if (blobUrlRef.current) {
+    //   URL.revokeObjectURL(blobUrlRef.current)
+    // }
     // Create a new blob URL for the current blob
-    blobUrlRef.current = URL.createObjectURL(blob)
-    console.log(blobUrlRef.current);
+    // blobUrlRef.current = URL.createObjectURL(blob)
 
     // Trigger a download using a hidden anchor element
     // if (hiddenAnchorRef.current) {
@@ -181,7 +182,7 @@ export default function ImgCropDialog({
       <DialogActions>
         <Button onClick={() => onCancel()}>Cancel</Button>
         <div className="grow" />
-        <Button onClick={() => onCropClick()}>Save</Button>
+        <Button onClick={() => handleSave()}>Save</Button>
       </DialogActions>
       {!!completedCrop && (
         <div className='hidden'>

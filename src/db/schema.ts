@@ -15,6 +15,7 @@ export const usersTable = pgTable(
     id: uuid("id").defaultRandom().notNull().unique(),
     username: varchar("username", { length: 100 }).notNull(),
     email: varchar("email", { length: 100 }).notNull(),
+    picture: varchar("picture", { length: 100 }).notNull(),
     hashedPassword: varchar("hashed_password", { length: 100 }),
     provider: varchar("provider", {
       length: 100,
@@ -24,7 +25,6 @@ export const usersTable = pgTable(
       .default("credentials"),
   },
   (table) => ({
-    // emailIndex: index("email_index").on(table.email),
     emailAndProviderIndex: index("email_and_provider_index").on(
       table.email,
       table.provider,

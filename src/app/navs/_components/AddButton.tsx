@@ -4,19 +4,19 @@ import { RiAddCircleFill } from "react-icons/ri";
 
 import IconButton from "@mui/material/IconButton";
 
-import ChatAddDialog from "../chats/_components/ChatAddDialog";
-import StoryAddDialog from "../stories/_components/StoryAddDialog";
+import AddChatDialog from "../chats/_components/AddChatDialog";
+import AddStoryDialog from "../stories/_components/AddStoryDialog";
 
 export default function AddButton({nav}: {nav: number}) {
-  const [openChatAddDialog, setOpenChatAddDialog] = useState(false);
-  const [openStoryAddDialog, setOpenStoryAddDialog] = useState(false);
+  const [openAddChatDialog, setOpenAddChatDialog] = useState(false);
+  const [openAddStoryDialog, setOpenAddStoryDialog] = useState(false);
   return (
     <div className="fixed bottom-5 right-0 z-50 flex">
-      <IconButton onClick={() => nav === 0 ? setOpenChatAddDialog(true) : setOpenStoryAddDialog(true)}>
+      <IconButton onClick={() => nav === 0 ? setOpenAddChatDialog(true) : setOpenAddStoryDialog(true)}>
         <RiAddCircleFill size={65} color="#1e9bf0" />
       </IconButton>
-      <ChatAddDialog open={openChatAddDialog} onClose={() => setOpenChatAddDialog(false)} />
-      <StoryAddDialog open={openStoryAddDialog} onClose={() => setOpenStoryAddDialog(false)} />
+      <AddChatDialog open={openAddChatDialog} onClose={() => setOpenAddChatDialog(false)} />
+      <AddStoryDialog open={openAddStoryDialog} onClose={() => setOpenAddStoryDialog(false)} />
     </div>
   );
 }
