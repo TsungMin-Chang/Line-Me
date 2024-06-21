@@ -13,7 +13,7 @@ function SignUpPage() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [picture, setPicture] = useState<FormData | null>(null);
+  const [picture, setPicture] = useState<string | null>(null);
 
   const [openImgCropDialog, setOpenImgCropDialog] = useState(false);
   const [crop, setCrop] = useState<Crop>();
@@ -60,15 +60,15 @@ function SignUpPage() {
       );
       return;
     }
-    // if(!picture) {
-    //   alert("Please (re)upload a profile picture!"); // TODO
-    //   return;
-    // }
+    if(!picture) {
+      alert("Please (re)upload a profile picture!");
+      return;
+    }
     signIn("credentials", {
       email,
       username,
       password,
-      picture: "fake for now",
+      picture,
       callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/navs/chats`,
     });
   };

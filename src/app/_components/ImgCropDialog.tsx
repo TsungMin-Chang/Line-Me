@@ -44,7 +44,7 @@ type ImgCropDialogProps = {
   imgSrc: string;
   crop?: Crop;
   setCrop: Dispatch<SetStateAction<Crop | undefined>>;
-  setPicture: Dispatch<SetStateAction<FormData | null>>;
+  setPicture: Dispatch<SetStateAction<string | null>>;
 };
 
 export default function ImgCropDialog({
@@ -113,11 +113,6 @@ export default function ImgCropDialog({
       type: "image/png",
     });
 
-    const formData = new FormData();
-    const fileName = new Date().getTime().toString() + "png";
-    formData.append("picture", blob, fileName);
-    setPicture(formData);
-
     // Revoke the any previous blob URL
     // if (blobUrlRef.current) {
     //   URL.revokeObjectURL(blobUrlRef.current)
@@ -131,6 +126,7 @@ export default function ImgCropDialog({
     //   hiddenAnchorRef.current.click()
     // }
 
+    setPicture("base64 string"); // TODO: convert blob into base64 string
     onClose();
   }
 

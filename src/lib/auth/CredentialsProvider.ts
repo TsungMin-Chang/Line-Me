@@ -7,20 +7,23 @@ import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { authSchema } from "@/validators/auth";
 
+import path from "path";
+import { writeFile } from "fs/promises";
+
 export default CredentialsProvider({
   name: "credentials",
   credentials: {
     email: { label: "Email", type: "text" },
     username: { label: "Username", type: "text", optional: true },
     password: { label: "Password", type: "password" },
-    picture: { label: "Picture", type: "text" }, // TODO
+    picture: { label: "Picture", type: "text" },
   },
   async authorize(credentials) {
     let validatedCredentials: {
       email: string;
       username?: string;
       password: string;
-      picture: string; // TODO
+      picture: string;
     };
 
     try {
@@ -29,32 +32,54 @@ export default CredentialsProvider({
       console.log("Wrong credentials. Try again.");
       return null;
     }
-    const { email, username, password, picture } = validatedCredentials; // TODO
+    const { email, username, password, picture } = validatedCredentials;
 
     const [existedUser] = await db
       .select({
         id: usersTable.id,
         username: usersTable.username,
         email: usersTable.email,
+        picture: usersTable.picture,
         provider: usersTable.provider,
         hashedPassword: usersTable.hashedPassword,
       })
       .from(usersTable)
       .where(eq(usersTable.email, validatedCredentials.email.toLowerCase()))
       .execute();
+
     if (!existedUser) {
       // Sign up
       if (!username) {
         console.log("Name is required.");
         return null;
       }
+      if (!picture) {
+        console.log("Picture is required.");
+        return null;
+      }
+
+      // TODO: convert base64 string into buffer
+      const buffer = new Buffer("base64 string");
+      const filename = "credentials_" + email;
+      const filepath = "public/pictures/" + filename;
+      console.log(filename);
+      try {
+        await writeFile(
+          path.join(process.cwd(), filepath),
+          buffer
+        );
+      } catch (error) {
+        console.log("Error occured ", error);
+        return null;
+      }
+
       const hashedPassword = await bcrypt.hash(password, 10);
       const [createdUser] = await db
         .insert(usersTable)
         .values({
           username,
           email: email.toLowerCase(),
-          picture,
+          picture: filepath,
           hashedPassword,
           provider: "credentials",
         })
@@ -63,6 +88,7 @@ export default CredentialsProvider({
         email: createdUser.email,
         name: createdUser.username,
         id: createdUser.id,
+        picture: createdUser.picture,
       };
     }
 
@@ -85,6 +111,7 @@ export default CredentialsProvider({
       email: existedUser.email,
       name: existedUser.username,
       id: existedUser.id,
+      picture: existedUser.picture,
     };
   },
 });
