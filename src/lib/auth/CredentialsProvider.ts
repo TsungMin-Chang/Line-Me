@@ -2,13 +2,12 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
+import { writeFile } from "fs/promises";
+import path from "path";
 
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { authSchema } from "@/validators/auth";
-
-import path from "path";
-import { writeFile } from "fs/promises";
 
 export default CredentialsProvider({
   name: "credentials",
@@ -64,10 +63,7 @@ export default CredentialsProvider({
       const filepath = "public/pictures/" + filename;
       console.log(filename);
       try {
-        await writeFile(
-          path.join(process.cwd(), filepath),
-          buffer
-        );
+        await writeFile(path.join(process.cwd(), filepath), buffer);
       } catch (error) {
         console.log("Error occured ", error);
         return null;

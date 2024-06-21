@@ -60,7 +60,7 @@ function SignUpPage() {
       );
       return;
     }
-    if(!picture) {
+    if (!picture) {
       alert("Please (re)upload a profile picture!");
       return;
     }
