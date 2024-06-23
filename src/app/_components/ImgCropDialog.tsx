@@ -112,6 +112,19 @@ export default function ImgCropDialog({
     const blob = await offscreen.convertToBlob({
       type: "image/png",
     });
+    
+    // Convert Blob to Base64 string
+    const blobToBase64 = (blob: Blob) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    };
+    const base64String = await blobToBase64(blob);
+    setPicture(base64String as string);
+    onClose();
 
     // Revoke the any previous blob URL
     // if (blobUrlRef.current) {
@@ -125,9 +138,6 @@ export default function ImgCropDialog({
     //   hiddenAnchorRef.current.href = blobUrlRef.current
     //   hiddenAnchorRef.current.click()
     // }
-
-    setPicture("base64 string"); // TODO: convert blob into base64 string
-    onClose();
   }
 
   // delay the execution of a function to avoid unnecessary processing

@@ -57,11 +57,17 @@ export default CredentialsProvider({
         return null;
       }
 
-      // TODO: convert base64 string into buffer
-      const buffer = new Buffer("base64 string");
+      // Convert base64 string into buffer
+      const base64Pattern = /^data:image\/(\w+);base64,/;
+      const matches = picture.match(base64Pattern);
+      if (!matches) {
+        return null;
+      }
+      const base64Data = picture.replace(base64Pattern, "");
+      const buffer = Buffer.from(base64Data, 'base64');
       const filename = "credentials_" + email;
       const filepath = "public/pictures/" + filename;
-      console.log(filename);
+      console.log(filepath);
       try {
         await writeFile(path.join(process.cwd(), filepath), buffer);
       } catch (error) {

@@ -17,7 +17,8 @@ export const {
   callbacks: {
     async session({ session, token }) {
       const email = token.email || session?.user?.email;
-      if (!email) return session;
+      const provider = token.provider || session?.user?.provider; // TODO: find provider
+      if (!email || !provider) return session;
       const [user] = await db
         .select({
           id: usersTable.id,
@@ -27,7 +28,12 @@ export const {
           picture: usersTable.picture,
         })
         .from(usersTable)
-        .where(eq(usersTable.email, email.toLowerCase()))
+        .where(
+          and(
+            eq(usersTable.email, email.toLowerCase()),
+            eq(usersTable.provider, provider),
+          ),
+        )
         .execute();
 
       return {
