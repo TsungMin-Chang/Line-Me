@@ -112,7 +112,7 @@ export default function ImgCropDialog({
     const blob = await offscreen.convertToBlob({
       type: "image/png",
     });
-    
+
     // Convert Blob to Base64 string
     const blobToBase64 = (blob: Blob) => {
       return new Promise((resolve, reject) => {
@@ -123,6 +123,10 @@ export default function ImgCropDialog({
       });
     };
     const base64String = await blobToBase64(blob);
+    if (!base64String) {
+      alert("(Pic upload) Fail to convert blob into base64 string!");
+      return;
+    }
     setPicture(base64String as string);
     onClose();
 

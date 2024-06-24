@@ -38,6 +38,8 @@ log.log
 next-env.d.ts
 
 /pg-data
+/pg-data2
+/public
 /static
 
 # public

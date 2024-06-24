@@ -1,7 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import bcrypt from "bcryptjs";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { writeFile } from "fs/promises";
 import path from "path";
 
@@ -22,7 +22,7 @@ export default CredentialsProvider({
       email: string;
       username?: string;
       password: string;
-      picture: string;
+      picture?: string;
     };
 
     try {
@@ -43,7 +43,12 @@ export default CredentialsProvider({
         hashedPassword: usersTable.hashedPassword,
       })
       .from(usersTable)
-      .where(eq(usersTable.email, validatedCredentials.email.toLowerCase()))
+      .where(
+        and(
+          eq(usersTable.email, validatedCredentials.email.toLowerCase()),
+          eq(usersTable.provider, "credentials"),
+        ),
+      )
       .execute();
 
     if (!existedUser) {
@@ -57,17 +62,18 @@ export default CredentialsProvider({
         return null;
       }
 
-      // Convert base64 string into buffer
+      // Convert iase64 string into buffer
       const base64Pattern = /^data:image\/(\w+);base64,/;
       const matches = picture.match(base64Pattern);
       if (!matches) {
         return null;
       }
       const base64Data = picture.replace(base64Pattern, "");
-      const buffer = Buffer.from(base64Data, 'base64');
-      const filename = "credentials_" + email;
-      const filepath = "public/pictures/" + filename;
-      console.log(filepath);
+      const buffer = Buffer.from(base64Data, "base64");
+
+      const filename = email + "_credentials";
+      const semiFilepath = "/pictures/" + filename;
+      const filepath = "/public" + semiFilepath;
       try {
         await writeFile(path.join(process.cwd(), filepath), buffer);
       } catch (error) {
@@ -81,7 +87,7 @@ export default CredentialsProvider({
         .values({
           username,
           email: email.toLowerCase(),
-          picture: filepath,
+          picture: semiFilepath,
           hashedPassword,
           provider: "credentials",
         })
@@ -110,9 +116,9 @@ export default CredentialsProvider({
       return null;
     }
     return {
+      id: existedUser.id,
       email: existedUser.email,
       name: existedUser.username,
-      id: existedUser.id,
       picture: existedUser.picture,
     };
   },

@@ -27,24 +27,21 @@ export const usersTable = pgTable(
   }),
 );
 
-export const chatroomsTable = pgTable(
-  "chatrooms",
-  {
-    id: uuid("id").defaultRandom().notNull().unique().primaryKey(),
-    userOneId: uuid("user_one_id")
-      .notNull()
-      .references(() => usersTable.id, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
-      userTwoId: uuid("user_two_id")
-      .notNull()
-      .references(() => usersTable.id, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
-  }
-);
+export const chatroomsTable = pgTable("chatrooms", {
+  id: uuid("id").defaultRandom().notNull().unique().primaryKey(),
+  userOneId: uuid("user_one_id")
+    .notNull()
+    .references(() => usersTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  userTwoId: uuid("user_two_id")
+    .notNull()
+    .references(() => usersTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+});
 
 export const chatsTable = pgTable(
   "chats",
@@ -64,7 +61,5 @@ export const chatsTable = pgTable(
         onUpdate: "cascade",
       }),
   },
-  (table) => ({
-    
-  }),
+  (table) => ({}),
 );

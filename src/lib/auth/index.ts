@@ -17,8 +17,26 @@ export const {
   callbacks: {
     async session({ session, token }) {
       const email = token.email || session?.user?.email;
-      const provider = token.provider || session?.user?.provider; // TODO: find provider
-      if (!email || !provider) return session;
+      if (!email) return session;
+
+      const picture = token.picture || session?.user?.image;
+      let provider;
+      if (picture && picture.includes("google")) {
+        provider = "google";
+      } else if (picture && picture.includes("github")) {
+        provider = "github";
+      } else {
+        provider = "credentials";
+      }
+
+      if (
+        !provider ||
+        (provider !== "github" &&
+          provider !== "google" &&
+          provider !== "credentials")
+      )
+        return session;
+
       const [user] = await db
         .select({
           id: usersTable.id,
@@ -42,8 +60,8 @@ export const {
           id: user.id,
           username: user.username,
           email: user.email,
-          picture: user.picture,
           provider: user.provider,
+          picture: user.picture,
         },
       };
     },

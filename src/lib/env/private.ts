@@ -2,8 +2,8 @@ import { z } from "zod";
 
 const privateEnvSchema = z.object({
   POSTGRES_URL: z.string().url(),
-    PUSHER_ID: z.string(),
-    PUSHER_SECRET: z.string(),
+  PUSHER_ID: z.string(),
+  PUSHER_SECRET: z.string(),
 });
 
 type PrivateEnv = z.infer<typeof privateEnvSchema>;
