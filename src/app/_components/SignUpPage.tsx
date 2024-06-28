@@ -56,7 +56,7 @@ function SignUpPage() {
       password.length < 8
     ) {
       alert(
-        "Please double check your password!\n(Note: has to be at least 8 characters long!)",
+        "Password Error!\n(Common mistake: has to be at least 8 characters long!)",
       );
       return;
     }

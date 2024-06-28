@@ -24,7 +24,7 @@ export default function ButtonNav() {
   }, [value]);
   return (
     <>
-      <div className="sticky bottom-0 w-screen">
+      <div className="fixed bottom-0 w-screen">
         <BottomNavigation
           showLabels
           value={value}

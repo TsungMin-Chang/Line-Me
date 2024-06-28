@@ -5,6 +5,7 @@ import {
   pgTable,
   uuid,
   varchar,
+  boolean,
   unique,
 } from "drizzle-orm/pg-core";
 
@@ -42,8 +43,12 @@ export const usersRelations = relations(usersTable, ({ many }) => ({
 // Chatrooms Table Definition
 export const chatroomsTable = pgTable("chatrooms", {
   id: uuid("id").defaultRandom().notNull().unique().primaryKey(),
+  createdAt: timestamp("created_at")
+    .default(sql`now()`)
+    .notNull(),
+  type: boolean("type").notNull(),
   title: varchar("title", { length: 100 }),
-  updatedAt: timestamp("updated_at").default(sql`now()`),
+  picture: varchar("picture", { length: 100 }),
 });
 
 // Chatrooms Relations Definition
@@ -71,7 +76,7 @@ export const usersToChatroomsTable = pgTable(
       }),
   },
   (table) => ({
-    userAndChatroomIndex: index("user_and_chatroom_index").on(
+    userAndChatroomIniex: index("user_and_chatroom_index").on(
       table.userId,
       table.chatroomId,
     ),
@@ -99,7 +104,9 @@ export const chatsTable = pgTable(
   "chats",
   {
     id: uuid("id").defaultRandom().notNull().unique().primaryKey(),
-    createdAt: timestamp("created_at").default(sql`now()`),
+    createdAt: timestamp("created_at")
+      .default(sql`now()`)
+      .notNull(),
     content: varchar("content", { length: 1000 }),
     usersToChatroomsId: uuid("users_to_chatrooms_id")
       .notNull()
@@ -109,7 +116,7 @@ export const chatsTable = pgTable(
       }),
   },
   (table) => ({
-    userToChatroomIndex: index("user_to_chatroom_index").on(
+    usersToChatroomsIdIndex: index("users_to_chatrooms_id_index").on(
       table.usersToChatroomsId,
     ),
   }),
