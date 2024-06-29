@@ -5,7 +5,7 @@ type Props = {
 function ChatLayout({ children }: Props) {
   return (
     <>
-      <div>{children}</div>
+      <div className="w-screen h-screen flex flex-col">{children}</div>
     </>
   );
 }
