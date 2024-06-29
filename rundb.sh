@@ -1,5 +1,5 @@
-podman volume rm --force pg-data2
-podman volume create pg-data2
+# podman volume rm --force pg-data2
+# podman volume create pg-data2
 podman run -d -it --replace \
   --name lineme \
   -e POSTGRES_DB=lineme \
