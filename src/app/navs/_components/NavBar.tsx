@@ -1,6 +1,3 @@
-"use client";
-
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,10 +6,33 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 
-function NavBar() {
-  const { data: session } = useSession();
-  const userId = session?.user?.id;
-  const userPic = session?.user?.picture;
+import { auth } from "@/lib/auth";
+
+async function NavBar() {
+  const session = await auth();
+  if (!session) {
+    // Redirect to the sign-in page
+    alert("session does not exist!");
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  const { user } = session;
+  if (!user) {
+    // Redirect to the sign-in page
+    alert("user does not exist!");
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  const { id: userId, picture: userPic } = user;
 
   return (
     <div className="sticky top-0 w-screen" style={{ height: "6vh" }}>

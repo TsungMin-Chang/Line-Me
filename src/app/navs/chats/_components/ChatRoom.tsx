@@ -51,7 +51,9 @@ export default function ChatRoom({
                   updatedAt.setHours(0, 0, 0, 0) ===
                     todaysDate.setHours(0, 0, 0, 0)
                     ? "h:mm A"
-                    : "h:mm A · D MMM YYYY",
+                    : updatedAt.getFullYear() === todaysDate.getFullYear()
+                      ? "h:mm A · D MMM"
+                      : "h:mm A · D MMM YYYY",
                 )}
               </span>
             </div>

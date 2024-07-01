@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth";
 
 import ChatBox from "./_components/ChatBox";
-import TitleBar from "./_components/TitleBar";
 import ChatInput from "./_components/ChatInput";
+import TitleBar from "./_components/TitleBar";
 
 type ChatPageProps = {
   params: {
@@ -39,25 +39,22 @@ async function ChatPage({ params: { chatroomId } }: ChatPageProps) {
     {
       id: "asdfqwerwqqqqqq",
       createdAt: new Date(0),
-      content: "faking fake chat",
+      content:
+        "The sun dipped below the horizon, casting a warm golden glow over the rolling hills. Birds chirped their evening songs, and the cool breeze rustled the leaves of the ancient oak tree that stood tall in the meadow. Sarah sat on the porch of her rustic cabin, sipping a cup of herbal tea. The day had been long and tiring, filled with chores and the hustle of everyday life. But now, in the tranquility of twilight, she found a moment of peace.",
       userId: "a1a97fe1-b37f-46a5-806e-b16ee8c24f91",
       userPicture: "/pictures/mileycyrus@email.com_credentials",
-      userName: "Miley Cyrus",
     },
     {
       id: "asdfqwerwqqqqqq123",
       createdAt: new Date(),
-      content: "faking fake chat2",
+      content:
+        "The sun dipped below the horizon, casting a warm golden glow over the rolling hills. Birds chirped their evening songs, and the cool breeze rustled the leaves of the ancient oak tree that stood tall in the meadow. Sarah sat on the porch of her rustic cabin, sipping a cup of herbal tea. The day had been long and tiring, filled with chores and the hustle of everyday life. But now, in the tranquility of twilight, she found a moment of peace.",
       userId: "880fdc36-36cc-4fbc-820e-90eea9ad4588",
       userPicture: "https://avatars.githubusercontent.com/u/144597204?v=4",
-      userName: "TsungMin-Chang",
     },
   ];
   return (
-    <>
-    <TitleBar
-    title={chatroomId}
-    />
+    <div className="flex flex-col">
       {fakeChats.map((chat) => (
         <ChatBox
           key={chat.id}
@@ -66,12 +63,10 @@ async function ChatPage({ params: { chatroomId } }: ChatPageProps) {
           content={chat.content}
           userId={chat.userId}
           userPicture={chat.userPicture}
-          userName={chat.userName}
           isLoggedInUser={loggedInUserId === chat.userId}
         />
       ))}
-      <ChatInput/>
-    </>
+    </div>
   );
 }
 export default ChatPage;

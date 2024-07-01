@@ -1,5 +1,3 @@
-"use client";
-
 import StoryBolck from "./_components/StoryBlock";
 
 function StoriesPage() {
