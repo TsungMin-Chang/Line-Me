@@ -5,10 +5,10 @@ import { IoIosSend } from "react-icons/io";
 export default function ChatInput() {
   return (
     <>
-      <div className="flex sticky bottom-0 w-screen">
-        <form className="p-2 flex-1 flex">
+      <div className="sticky bottom-0 flex w-screen">
+        <form className="flex flex-1 p-2">
           <input
-            className="rounded-md border border-black text-black flex-1"
+            className="flex-1 rounded-md border border-black text-black"
             type={"text"}
             defaultValue={"Message"}
             onChange={(e) => {

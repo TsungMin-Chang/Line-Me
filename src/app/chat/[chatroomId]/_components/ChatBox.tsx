@@ -25,14 +25,14 @@ export default function ChatBox({
       {!isLoggedInUser ? (
         <>
           <div className="col-span-2 flex flex-row gap-x-3">
-          <Image
-                className="object-contain self-start"
-                style={{borderRadius: "9999px"}}
-                src={userPicture}
-                width={28}
-                height={28}
-                alt={`${userId}`}
-              />
+            <Image
+              className="self-start object-contain"
+              style={{ borderRadius: "9999px" }}
+              src={userPicture}
+              width={28}
+              height={28}
+              alt={`${userId}`}
+            />
             <div className="flex justify-center text-pretty">{content}</div>
             <div className="self-end text-xs text-zinc-400">
               {dayjs(createdAt).format("h:mm A")}
