@@ -1,8 +1,16 @@
+import { eq, asc } from "drizzle-orm";
+
+import { db } from "@/db";
+import {
+  usersTable,
+  usersToChatroomsTable,
+  chatsTable,
+  chatroomsTable,
+} from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-import ChatBox from "./_components/ChatBox";
-import ChatInput from "./_components/ChatInput";
 import TitleBar from "./_components/TitleBar";
+import ChatBox from "./_components/ChatBox";
 
 type ChatPageProps = {
   params: {
@@ -33,34 +41,70 @@ async function ChatPage({ params: { chatroomId } }: ChatPageProps) {
       },
     };
   }
-  const { id: loggedInUserId } = user;
+  const { id: loggedInUserId, username: loggedInUserUsername } = user;
 
-  const fakeChats = [
-    {
-      id: "asdfqwerwqqqqqq",
-      createdAt: new Date(0),
-      content:
-        "The sun dipped below the horizon, casting a warm golden glow over the rolling hills. Birds chirped their evening songs, and the cool breeze rustled the leaves of the ancient oak tree that stood tall in the meadow. Sarah sat on the porch of her rustic cabin, sipping a cup of herbal tea. The day had been long and tiring, filled with chores and the hustle of everyday life. But now, in the tranquility of twilight, she found a moment of peace.",
-      userId: "a1a97fe1-b37f-46a5-806e-b16ee8c24f91",
-      userPicture: "/pictures/mileycyrus@email.com_credentials",
-    },
-    {
-      id: "asdfqwerwqqqqqq123",
-      createdAt: new Date(),
-      content:
-        "The sun dipped below the horizon, casting a warm golden glow over the rolling hills. Birds chirped their evening songs, and the cool breeze rustled the leaves of the ancient oak tree that stood tall in the meadow. Sarah sat on the porch of her rustic cabin, sipping a cup of herbal tea. The day had been long and tiring, filled with chores and the hustle of everyday life. But now, in the tranquility of twilight, she found a moment of peace.",
-      userId: "880fdc36-36cc-4fbc-820e-90eea9ad4588",
-      userPicture: "https://avatars.githubusercontent.com/u/144597204?v=4",
-    },
-  ];
+  const chats = await db
+    .select({
+      id: chatsTable.id,
+      createdAt: chatsTable.createdAt,
+      content: chatsTable.content,
+      userId: usersTable.id,
+      userPicture: usersTable.picture,
+    })
+    .from(usersToChatroomsTable)
+    .innerJoin(usersTable, eq(usersToChatroomsTable.userId, usersTable.id))
+    .innerJoin(
+      chatsTable,
+      eq(chatsTable.usersToChatroomsId, usersToChatroomsTable.id),
+    )
+    .where(eq(usersToChatroomsTable.chatroomId, chatroomId))
+    .orderBy(asc(chatsTable.createdAt));
+
+  const titleArray = await db
+    .select({
+      chatroomType: chatroomsTable.type,
+      chatroomTitle: chatroomsTable.title,
+      username: usersTable.username,
+    })
+    .from(usersToChatroomsTable)
+    .innerJoin(usersTable, eq(usersToChatroomsTable.userId, usersTable.id))
+    .innerJoin(
+      chatroomsTable,
+      eq(usersToChatroomsTable.chatroomId, chatroomsTable.id),
+    )
+    .where(eq(usersToChatroomsTable.chatroomId, chatroomId));
+
+  let title;
+  if (!titleArray[0].chatroomType) { // group chat
+    title = titleArray[0].chatroomTitle;
+  } else { // indiviual chat
+    for (const ele of titleArray) {
+      if (ele.username !== loggedInUserUsername) {
+        title = ele.username;
+        break;
+      }
+    }
+  }
+  if (!title) {
+    // Redirect to the sign-in page
+    alert("title does not exist!");
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   return (
     <div className="flex flex-col">
-      {fakeChats.map((chat) => (
+      <TitleBar title={title} />
+      {chats.map((chat) => (
         <ChatBox
           key={chat.id}
           id={chat.id}
           createdAt={chat.createdAt}
-          content={chat.content}
+          content={chat.content ?? ""}
           userId={chat.userId}
           userPicture={chat.userPicture}
           isLoggedInUser={loggedInUserId === chat.userId}

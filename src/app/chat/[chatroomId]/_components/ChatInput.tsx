@@ -6,7 +6,7 @@ export default function ChatInput() {
   return (
     <>
       <div className="sticky bottom-0 flex w-screen">
-        <form className="flex flex-1 p-2">
+        <form className="flex flex-1 p-3">
           <input
             className="flex-1 rounded-md border border-black text-black"
             type={"text"}
