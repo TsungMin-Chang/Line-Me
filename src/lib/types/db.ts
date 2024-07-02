@@ -5,3 +5,8 @@ export type User = {
   provider: "github" | "google" | "credentials";
   picture: string;
 };
+
+export type Chat = {
+  id: string;
+  content: string;
+};

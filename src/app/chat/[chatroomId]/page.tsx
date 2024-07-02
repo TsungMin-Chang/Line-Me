@@ -9,8 +9,9 @@ import {
 } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-import TitleBar from "./_components/TitleBar";
 import ChatBox from "./_components/ChatBox";
+import ChatInput from "./_components/ChatInput";
+import TitleBar from "./_components/TitleBar";
 
 type ChatPageProps = {
   params: {
@@ -75,9 +76,11 @@ async function ChatPage({ params: { chatroomId } }: ChatPageProps) {
     .where(eq(usersToChatroomsTable.chatroomId, chatroomId));
 
   let title;
-  if (!titleArray[0].chatroomType) { // group chat
+  if (!titleArray[0].chatroomType) {
+    // group chat
     title = titleArray[0].chatroomTitle;
-  } else { // indiviual chat
+  } else {
+    // indiviual chat
     for (const ele of titleArray) {
       if (ele.username !== loggedInUserUsername) {
         title = ele.username;
@@ -97,19 +100,22 @@ async function ChatPage({ params: { chatroomId } }: ChatPageProps) {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex h-screen w-screen flex-col">
       <TitleBar title={title} />
-      {chats.map((chat) => (
-        <ChatBox
-          key={chat.id}
-          id={chat.id}
-          createdAt={chat.createdAt}
-          content={chat.content ?? ""}
-          userId={chat.userId}
-          userPicture={chat.userPicture}
-          isLoggedInUser={loggedInUserId === chat.userId}
-        />
-      ))}
+      <div className="flex-1 overflow-y-scroll">
+        {chats.map((chat) => (
+          <ChatBox
+            key={chat.id}
+            id={chat.id}
+            createdAt={chat.createdAt}
+            content={chat.content ?? ""}
+            userId={chat.userId}
+            userPicture={chat.userPicture}
+            isLoggedInUser={loggedInUserId === chat.userId}
+          />
+        ))}
+      </div>
+      <ChatInput userId={loggedInUserId} chatroomId={chatroomId} />
     </div>
   );
 }

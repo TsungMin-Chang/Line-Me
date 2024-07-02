@@ -1,11 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { eq, asc, desc, and } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 import { db } from "@/db";
 import { usersTable, chatroomsTable, usersToChatroomsTable } from "@/db/schema";
 // import type { DbMemo } from "@/lib/types";
-import type { PostAffairRequest } from "@/validators/crudTypes";
+import type { PostChatroomRequest } from "@/validators/crudTypes";
 import { postChatroomRequestSchema } from "@/validators/crudTypes";
 
 export async function POST(request: NextRequest) {
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
-  const { userId, type, email, provider } = data as PostAffairRequest;
+  const { userId, type, email, provider } = data as PostChatroomRequest;
   if (
     !provider ||
     (provider !== "github" &&

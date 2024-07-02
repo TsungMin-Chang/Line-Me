@@ -9,7 +9,7 @@ function NavsLayout({ children }: Props) {
   return (
     <div className="flex h-screen w-screen flex-col">
       <NavBar />
-      <div className="flex-1 overflow-y-scroll">{children}</div>
+      <div>{children}</div>
       <BottomNav />
     </div>
   );

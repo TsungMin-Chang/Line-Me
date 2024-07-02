@@ -7,4 +7,12 @@ export const postChatroomRequestSchema = z.object({
   email: z.string().max(100),
   provider: z.string().max(16),
 });
-export type PostAffairRequest = z.infer<typeof postChatroomRequestSchema>;
+export type PostChatroomRequest = z.infer<typeof postChatroomRequestSchema>;
+
+// POST Chat
+export const postChatRequestSchema = z.object({
+  userId: z.string().uuid(),
+  chatroomId: z.string().uuid(),
+  content: z.string(),
+});
+export type PostChatRequest = z.infer<typeof postChatRequestSchema>;

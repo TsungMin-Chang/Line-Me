@@ -1,5 +1,3 @@
-import ChatInput from "./[chatroomId]/_components/ChatInput";
-
 type Props = {
   children: React.ReactNode;
 };
@@ -7,10 +5,7 @@ type Props = {
 function ChatLayout({ children }: Props) {
   return (
     <>
-      <div className="flex h-screen w-screen flex-col">
-        <div className="flex-1 overflow-y-scroll">{children}</div>
-        <ChatInput />
-      </div>
+      <div>{children}</div>
     </>
   );
 }

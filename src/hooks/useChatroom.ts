@@ -1,7 +1,7 @@
-import type { PostAffairRequest } from "@/validators/crudTypes";
+import type { PostChatroomRequest } from "@/validators/crudTypes";
 
 export default function useChatroom() {
-  const postChatroom = async (data: PostAffairRequest) => {
+  const postChatroom = async (data: PostChatroomRequest) => {
     const jsonData = JSON.stringify(data);
     const res = await fetch(`/api/chatrooms`, {
       method: "POST",
@@ -27,7 +27,7 @@ export default function useChatroom() {
   //     return;
   //   }, []);
 
-  const deleteCard = async (chatroomId: string) => {
+  const deleteChatroom = async (chatroomId: string) => {
     const res = await fetch(`/api/cards`, {
       method: "DELETE",
       headers: { chatroomId },
@@ -43,6 +43,6 @@ export default function useChatroom() {
     // getCards,
     postChatroom,
     // updateCard,
-    deleteCard,
+    deleteChatroom,
   };
 }

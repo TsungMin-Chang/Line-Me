@@ -12,7 +12,7 @@ type TitleBarProps = {
 
 function TitleBar({ title }: TitleBarProps) {
   return (
-    <div className="sticky top-0 mb-4 w-screen" style={{ height: "6vh" }}>
+    <div className="sticky top-0 mb-2 w-screen" style={{ height: "6vh" }}>
       <Box className="flex-none" sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar className="bg-brand">
