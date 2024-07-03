@@ -1,4 +1,3 @@
-// this is a server side component
 import Image from "next/image";
 
 import dayjs from "dayjs";
@@ -33,8 +32,13 @@ export default function ChatBox({
               height={28}
               alt={`${userId}`}
             />
-            <div className="flex justify-center text-pretty">{content}</div>
-            <div className="self-end text-xs text-zinc-400">
+            <div className="flex justify-center text-pretty rounded-lg border-2 border-black p-1">
+              {content}
+            </div>
+            <div
+              className="self-end text-nowrap text-zinc-400"
+              style={{ fontSize: "0.65rem" }}
+            >
               {dayjs(createdAt).format("h:mm A")}
             </div>
             <div className="grow"></div>
@@ -46,11 +50,16 @@ export default function ChatBox({
           <div className="col-span-1"></div>
           <div className="col-span-2 flex flex-row gap-x-3">
             <div className="grow"></div>
-            <div className="self-end text-xs text-zinc-400">
+            <div
+              className="self-end text-zinc-400"
+              style={{ fontSize: "0.65rem" }}
+            >
               {dayjs(createdAt).format("h:mm A")}
             </div>
 
-            <div className="flex justify-center text-pretty">{content}</div>
+            <div className="flex justify-center text-pretty rounded-lg border-2 border-black p-1">
+              {content}
+            </div>
           </div>
         </>
       )}

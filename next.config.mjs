@@ -14,6 +14,12 @@ const nextConfig = {
         port: "",
         pathname: "/a/**",
       },
+      {
+        protocol: "https",
+        hostname: "lineme.cinatrin.pro/",
+        port: "",
+        pathname: "/navs/**",
+      },
     ],
   },
 };

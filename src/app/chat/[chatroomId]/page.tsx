@@ -102,7 +102,7 @@ async function ChatPage({ params: { chatroomId } }: ChatPageProps) {
   return (
     <div className="flex h-screen w-screen flex-col">
       <TitleBar title={title} />
-      <div className="flex-1 overflow-y-scroll">
+      <div className="flex-1 overflow-y-scroll" id="chat_boxes">
         {chats.map((chat) => (
           <ChatBox
             key={chat.id}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoIosSend } from "react-icons/io";
 
 import useChat from "@/hooks/useChat";
@@ -11,6 +11,13 @@ type ChatInputProps = {
 };
 
 export default function ChatInput({ userId, chatroomId }: ChatInputProps) {
+  useEffect(() => {
+    var element = document.getElementById("chat_boxes");
+    if (element && element.lastElementChild) {
+      element.lastElementChild.scrollIntoView(false);
+    }
+  });
+
   const { postChat } = useChat();
   const [content, setContent] = useState<string>("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,7 +35,7 @@ export default function ChatInput({ userId, chatroomId }: ChatInputProps) {
   };
   return (
     <>
-      <div className="fixed bottom-0 w-screen">
+      <div className="sticky bottom-0 w-screen">
         <form onSubmit={handleSubmit} className="flex flex-1 p-3">
           <input
             className="flex-1 rounded-md border border-black text-black"

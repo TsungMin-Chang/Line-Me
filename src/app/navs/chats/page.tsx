@@ -1,5 +1,5 @@
 // this is a server side component
-import { eq, and, ne, inArray } from "drizzle-orm";
+import { eq, and, ne, inArray, desc } from "drizzle-orm";
 
 import { db } from "@/db";
 import {
@@ -81,7 +81,7 @@ const ChatsPage = async () => {
   );
   const lastChats = await db
     .selectDistinctOn([chatsTable.usersToChatroomsId], {
-      chatroomId: chatsTable.usersToChatroomsId,
+      chatroomId: usersToChatroomsTable.chatroomId,
       content: chatsTable.content,
       createdAt: chatsTable.createdAt,
     })
@@ -101,7 +101,7 @@ const ChatsPage = async () => {
           )
         : ne(usersToChatroomsTable.userId, userId),
     )
-    .orderBy(chatsTable.usersToChatroomsId);
+    .orderBy(chatsTable.usersToChatroomsId, desc(chatsTable.createdAt));
 
   // Combine the data
   const chatrooms = userChatrooms.map((chatroom) => {
@@ -135,7 +135,6 @@ const ChatsPage = async () => {
       };
     }
   });
-
   // Sort the chatrooms array in descending order of updatedAt
   chatrooms.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
 

@@ -57,7 +57,7 @@ export default function ChatRoom({
                 )}
               </span>
             </div>
-            <span className="overflow-hidden text-ellipsis text-nowrap">
+            <span className="overflow-hidden text-ellipsis text-nowrap text-zinc-600">
               {lastChat}
             </span>
           </div>

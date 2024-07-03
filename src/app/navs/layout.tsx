@@ -8,8 +8,9 @@ type Props = {
 function NavsLayout({ children }: Props) {
   return (
     <div className="flex h-screen w-screen flex-col">
+      {/* @ts-expect-error Server Component */}
       <NavBar />
-      <div>{children}</div>
+      <div className="flex-1 overflow-y-scroll">{children}</div>
       <BottomNav />
     </div>
   );
