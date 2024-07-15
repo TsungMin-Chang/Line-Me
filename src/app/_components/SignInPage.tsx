@@ -3,23 +3,31 @@ import { BsGithub } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
 
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import { publicEnv } from "@/lib/env/public";
 
 import AuthInput from "./AuthInput";
 
 function SignInPage() {
+  const router = useRouter();
   const [email, setEmail] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signIn("credentials", {
       email,
-      username,
+      username: "",
       password,
       callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/navs/chats`,
+      redirect: false,
+    }).then((res) => {
+      if (res && res.ok && res.url) {
+        router.push(res.url);
+      } else {
+        alert("Sign in fails, try again!");
+      }
     });
   };
 

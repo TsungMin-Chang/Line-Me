@@ -62,7 +62,7 @@ export default CredentialsProvider({
         return null;
       }
 
-      // Convert iase64 string into buffer
+      // Convert base64 string into buffer
       const base64Pattern = /^data:image\/(\w+);base64,/;
       const matches = picture.match(base64Pattern);
       if (!matches) {
@@ -92,10 +92,11 @@ export default CredentialsProvider({
           provider: "credentials",
         })
         .returning();
+
       return {
+        id: createdUser.id,
         email: createdUser.email,
         name: createdUser.username,
-        id: createdUser.id,
         picture: createdUser.picture,
       };
     }
@@ -115,6 +116,7 @@ export default CredentialsProvider({
       console.log("Wrong password. Try again.");
       return null;
     }
+
     return {
       id: existedUser.id,
       email: existedUser.email,
