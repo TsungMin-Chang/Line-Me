@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Crop } from "react-image-crop";
 
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import { publicEnv } from "@/lib/env/public";
 
@@ -9,6 +10,8 @@ import AuthInput from "./AuthInput";
 import ImgCropDialog from "./ImgCropDialog";
 
 function SignUpPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -55,9 +58,7 @@ function SignUpPage() {
       password !== confirmPassword ||
       password.length < 8
     ) {
-      alert(
-        "Password Error!\n(Common mistake: has to be at least 8 characters long!)",
-      );
+      alert("Password Error!");
       return;
     }
     if (!picture) {
@@ -70,6 +71,13 @@ function SignUpPage() {
       password,
       picture,
       callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/navs/chats`,
+      redirect: false,
+    }).then((res) => {
+      if (res && res.ok && res.url) {
+        router.push(res.url);
+      } else {
+        alert("Sign up fails, try again!");
+      }
     });
   };
 

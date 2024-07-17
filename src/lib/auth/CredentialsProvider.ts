@@ -2,12 +2,63 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import bcrypt from "bcryptjs";
 import { eq, and } from "drizzle-orm";
-import { writeFile } from "fs/promises";
-import path from "path";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import type { StorageReference } from "firebase/storage";
 
+// import { writeFile } from "fs/promises";
+// import path from "path";
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
+import { storage } from "@/lib/firebaseConfig";
 import { authSchema } from "@/validators/auth";
+
+const uploadImageWithTimeout = async (
+  storageRef: StorageReference,
+  blob: Blob,
+) => {
+  const timeoutPromise = (ms: number) =>
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Timeout after " + ms + " ms")), ms),
+    );
+
+  const uploadTask = uploadBytesResumable(storageRef, blob);
+  const uploadPromise = new Promise((resolve, reject) => {
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // const progress = snapshot.bytesTransferred / snapshot.totalBytes;
+        // const progressPercent = progress * 100;
+        // console.log("Upload is " + progressPercent + "% done");
+      },
+      (error) => {
+        console.log("Error uploading to Firebase: ", error);
+        reject(error);
+      },
+      async () => {
+        try {
+          const url = await getDownloadURL(uploadTask.snapshot.ref);
+          resolve(url);
+        } catch (error) {
+          console.log("Error getting download URL from Firebase: ", error);
+          reject(error);
+        }
+      },
+    );
+  });
+
+  try {
+    const downloadURL = await Promise.race([
+      uploadPromise,
+      timeoutPromise(10000),
+    ]); // 10 seconds timeout
+    return downloadURL;
+  } catch (error) {
+    console.log("Error occurred:", error);
+    return null;
+  }
+};
+
+
 
 export default CredentialsProvider({
   name: "credentials",
@@ -68,18 +119,29 @@ export default CredentialsProvider({
       if (!matches) {
         return null;
       }
+      const mimeType = `image/${matches[1]}`;
       const base64Data = picture.replace(base64Pattern, "");
-      const buffer = Buffer.from(base64Data, "base64");
 
+      // yarn start mode - store images at google firebase, send in blob: hangs sometimes
+      const buffer = Buffer.from(base64Data, "base64");
+      const blob = new Blob([buffer], { type: mimeType });
       const filename = email + "_credentials";
-      const semiFilepath = "/pictures/" + filename;
-      const filepath = "/public" + semiFilepath;
-      try {
-        await writeFile(path.join(process.cwd(), filepath), buffer);
-      } catch (error) {
-        console.log("Error occured ", error);
+      const storageRef = ref(storage, filename);
+      const downloadURL = await uploadImageWithTimeout(storageRef, blob);
+      if (downloadURL === null) {
+        console.log("downloadURL is null.");
         return null;
       }
+
+      // yarn dev mode - store images at public folder
+      // const semiFilepath = "/pictures/" + filename;
+      // const filepath = "/public" + semiFilepath;
+      // try {
+      //   await writeFile(path.join(process.cwd(), filepath), buffer);
+      // } catch (error) {
+      //   console.log("Error occured ", error);
+      //   return null;
+      // }
 
       const hashedPassword = await bcrypt.hash(password, 10);
       const [createdUser] = await db
@@ -87,7 +149,7 @@ export default CredentialsProvider({
         .values({
           username,
           email: email.toLowerCase(),
-          picture: semiFilepath,
+          picture: (downloadURL as string) ?? "",
           hashedPassword,
           provider: "credentials",
         })
